@@ -1,5 +1,20 @@
+#include<StandardCplusplus.h>
+#include <map>
 
-template <struct T>
+
+enum REQUEST_TYPE{
+  GET,
+  SET,
+  GETALL
+};
+
+enum REQUEST_DTYPE{
+  INT,
+  STR,
+  DBL
+};
+
+template <class T>
 class BTParam{
   private:
   T* var;
@@ -13,29 +28,48 @@ class BTParam{
   T get(){
     return *var;
   }
-}
+};
+
+class BTRequest{
+
+  private:
+  REQUEST_TYPE method;
+  REQUEST_DTYPE type;
+  String varname;
+  String value;
+
+  public:
+
+  BTRequest(String requestString){
+    
+  }
+  
+};
 
 class BluetoothParameters{
   private:
 
-  struct dtypes{
-    int i;
-    String s;
-    boolean b;
-    double d;
-  }
+  // TODO: Reduce into one map, use inheritance?
 
-  map<String, dtypes> paramMap;
+  std::map<String, BTParam<int>> intMap;
+  std::map<String, BTParam<String>> stringMap;
+  std::map<String, BTParam<double>> doubleMap;
 
   public:
   
   BluetoothParameters(){
-      
+      intMap = std::map<String, BTParam<int>>();
+      stringMap = std::map<String, BTParam<String>>();
+      doubleMap = std::map<String, BTParam<double>>();
+  }
+
+  void handleRequest(String request){
+    
   }
 
   
   
-}
+};
 
 
 void setup() {
