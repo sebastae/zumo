@@ -41,15 +41,25 @@ class BTRequest{
   public:
 
   BTRequest(String requestString){
-    
-  }
+    switch(requestString[0]){
+      case 'A':
+        method = GETALL;
+        break;
+      case 'S':
+        method = SET;
+        break;
+      case 'G':
+        method = GET;
+        break;
+      default:
+        
+    };
+  };
   
 };
 
 class BluetoothParameters{
   private:
-
-  // TODO: Reduce into one map, use inheritance?
 
   std::map<String, BTParam<int>> intMap;
   std::map<String, BTParam<String>> stringMap;
