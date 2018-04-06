@@ -47,7 +47,7 @@ int checkUSdistance(char sensorLocation) {
   }
   return duration;
 }
-
+/*
 void printSensorCheck() { // Husk å 
   Serial.print(checkUS('C'));
   Serial.print(" - ");
@@ -58,4 +58,4 @@ void printSensorCheck() { // Husk å
   Serial.print(checkUS('B'));
   Serial.println();
   
-}
+}*/
