@@ -25,7 +25,7 @@ bool checkUS(char sensorLocation) {
   return false;
 }
 
-int checkUSdistanse(char sensorLocation) {
+int checkUSdistance(char sensorLocation) {
   long duration;
   digitalWrite(trigPin, LOW);
   delayMicroseconds(2);
@@ -54,5 +54,8 @@ void printSensorCheck() { // Husk å
   Serial.print(checkUS('L'));
   Serial.print(" - ");
   Serial.print(checkUS('R'));
+  Serial.print(" - ");
+  Serial.print(checkUS('B'));
   Serial.println();
+  
 }

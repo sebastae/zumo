@@ -22,11 +22,11 @@ int mode = 1;
 #define echoCenterPin 5
 #define echoLeftPin 4
 #define echoRightPin 3
-#define echoBackPin 3
+#define echoBackPin 11
 
 #define usSenTrigDistanse 3000
 #define usSenTrigTimeout 4000
-#define usSenTrigDefThreshold 500
+#define usSenTrigDefThreshold 1200
 
 bool lastSeenLeft = true;
 
@@ -44,7 +44,7 @@ unsigned int irVal[NUM_SENSORS];
 // -------------------------- Movement
 
 #define motorMaxSpeed 400
-#define TURNTIME 300;
+#define TURNTIME 300
 
 int aks = 150;
 int deseleration = 600;
@@ -64,7 +64,7 @@ Pushbutton button(ZUMO_BUTTON);
 
 // -------------------------- Setup
 void setup() {
-  // Serial.begin (9600);
+  Serial.begin (9600);
   pinMode(trigPin, OUTPUT);
   pinMode(echoCenterPin, INPUT);
   pinMode(echoLeftPin, INPUT);
@@ -101,6 +101,7 @@ void loop() {
   } else if(mode == BLUETOOTH) {
     modeBluetooth();
   } 
+  printSensorCheck();
   
 }
 
