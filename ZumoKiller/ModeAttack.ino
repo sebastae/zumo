@@ -1,5 +1,5 @@
 void modeAttack() { 
-  Serial.println("FREMAD"); 
+  //Serial.println("FREMAD"); 
   usC = checkUS('C');
   usL = checkUS('L');
   usR = checkUS('R');

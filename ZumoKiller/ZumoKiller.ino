@@ -43,7 +43,7 @@ unsigned int irVal[NUM_SENSORS];
 
 // -------------------------- Movement
 
-#define motorMaxSpeed 300
+#define motorMaxSpeed 350
 #define TURNTIME 300
 
 int aks = 150;
@@ -64,7 +64,7 @@ Pushbutton button(ZUMO_BUTTON);
 
 // -------------------------- Setup
 void setup() {
-  Serial.begin (9600);
+  //Serial.begin (9600);
   pinMode(trigPin, OUTPUT);
   pinMode(echoCenterPin, INPUT);
   pinMode(echoLeftPin, INPUT);
@@ -102,7 +102,7 @@ void loop() {
   } else if(mode == BLUETOOTH) {
     modeBluetooth();
   } 
-  printSensorCheck();
+  //printSensorCheck();
   
 }
 
