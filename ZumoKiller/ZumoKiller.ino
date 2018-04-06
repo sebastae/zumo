@@ -22,9 +22,11 @@ int mode = 1;
 #define echoCenterPin 5
 #define echoLeftPin 4
 #define echoRightPin 3
+#define echoBackPin 3
 
 #define usSenTrigDistanse 3000
 #define usSenTrigTimeout 4000
+#define usSenTrigDefThreshold 500
 
 bool lastSeenLeft = true;
 
@@ -42,6 +44,7 @@ unsigned int irVal[NUM_SENSORS];
 // -------------------------- Movement
 
 #define motorMaxSpeed 400
+#define TURNTIME 300;
 
 int aks = 150;
 int deseleration = 600;
@@ -82,6 +85,8 @@ void loop() {
     mode = STOP;
   } else if (checkLine()) {
     mode = EDGE;
+  } else if(checkUS('B')) {
+    mode = DEFENCE;
   }
 
   // Kjøring av satt modus

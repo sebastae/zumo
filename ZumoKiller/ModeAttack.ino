@@ -1,7 +1,7 @@
 void modeAttack() {  
-  usC = checkCenter('C');
-  usL = checkCenter('L');
-  usR = checkCenter('R');
+  usC = checkUS('C');
+  usL = checkUS('L');
+  usR = checkUS('R');
   
   //if((usC && !(usL || usR)) || (usC && usL && usR)) {
   if((usC && usL && usR) || (usC && !usL && !usR)) {
