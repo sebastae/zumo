@@ -1,4 +1,5 @@
-void modeAttack() {  
+void modeAttack() { 
+  Serial.println("FREMAD"); 
   usC = checkUS('C');
   usL = checkUS('L');
   usR = checkUS('R');
@@ -27,9 +28,9 @@ void modeAttack() {
   } 
   else {
     if(lastSeenLeft) {
-      motors.setSpeeds(-motorMaxSpeed, motorMaxSpeed);  
+      motors.setSpeeds(-motorMaxSpeed/2, motorMaxSpeed/2); 
     } else {
-      motors.setSpeeds(motorMaxSpeed, -motorMaxSpeed);
+      motors.setSpeeds(motorMaxSpeed/2, -motorMaxSpeed/2);
     }
   }
   

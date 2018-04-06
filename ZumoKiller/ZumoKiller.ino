@@ -26,7 +26,7 @@ int mode = 1;
 
 #define usSenTrigDistanse 3000
 #define usSenTrigTimeout 4000
-#define usSenTrigDefThreshold 1200
+#define usSenTrigDefThreshold 800
 
 bool lastSeenLeft = true;
 
@@ -43,7 +43,7 @@ unsigned int irVal[NUM_SENSORS];
 
 // -------------------------- Movement
 
-#define motorMaxSpeed 400
+#define motorMaxSpeed 300
 #define TURNTIME 300
 
 int aks = 150;
@@ -74,6 +74,7 @@ void setup() {
 
   digitalWrite(led, HIGH);
   button.waitForButton();
+  delay(1000);
   digitalWrite(led, LOW);
 }
 
@@ -83,9 +84,9 @@ void loop() {
   // Sett modus
   if(button.isPressed()) {
     mode = STOP;
-  } else if (checkLine()) {
+  } else if ((mode != STOP) && checkLine()) {
     mode = EDGE;
-  } else if(checkUS('B')) {
+  } else if((mode != STOP) && checkUSdistance('B') < 1300 && checkUSdistance('B') > 0) {
     mode = DEFENCE;
   }
 
