@@ -1,7 +1,6 @@
 #include <ZumoMotors.h>
 #include <Pushbutton.h>
 #include <QTRSensors.h>
-#include <ZumoReflectanceSensorArray.h>
 
 ZumoMotors motors;
 
@@ -32,12 +31,17 @@ bool lastSeenLeft = true;
 
 // IR
 
-ZumoReflectanceSensorArray ir;
- 
+#define NUM_SENSORS             6  // number of sensors used
+#define NUM_SAMPLES_PER_SENSOR  2  // average 4 analog samples per sensor reading
+#define EMITTER_PIN             2  // emitter is controlled by digital pin 2
+
+QTRSensorsAnalog ir((unsigned char[]) {0, 1, 2, 3, 4, 5}, 
+NUM_SENSORS, NUM_SAMPLES_PER_SENSOR, EMITTER_PIN);
+unsigned int irVal[NUM_SENSORS];
 
 // -------------------------- Movement
 
-#define motorMaxSpeed 200
+#define motorMaxSpeed 400
 
 int aks = 150;
 int deseleration = 600;
@@ -65,8 +69,6 @@ void setup() {
   pinMode(led, OUTPUT);
   pinMode(12, INPUT_PULLUP);
 
-  ir.init();
-
   digitalWrite(led, HIGH);
   button.waitForButton();
   digitalWrite(led, LOW);
@@ -78,6 +80,8 @@ void loop() {
   // Sett modus
   if(button.isPressed()) {
     mode = STOP;
+  } else if (checkLine()) {
+    mode = EDGE;
   }
 
   // Kjøring av satt modus
@@ -92,11 +96,6 @@ void loop() {
   } else if(mode == BLUETOOTH) {
     modeBluetooth();
   } 
-  /*
-  else {
-    modeTrack();
-  }
-  */
   
 }
 
