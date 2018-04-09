@@ -68,16 +68,13 @@ class BluetoothManager{
   private:
     BluetoothParameters* btParams;
     String reqStr;
-    String name;
-    String pass;
     SoftwareSerial serial;
     bool mode;
   public:
-    BluetoothManager(BluetoothParameters* btParams);
+    BluetoothManager(BluetoothParameters* btParams, int rx, int tx);
     void receive();
     void send(String requestString);
     void setup(String name, String pass);
-    void setupSerial(int tx, int rx);
     void setMode(bool at);
     void atCommand(String command);
 };
@@ -194,10 +191,9 @@ String BTRequest::getValue(){
 
 // BluetoothManager
 
-BluetoothManager::BluetoothManager(BluetoothParameters* btParams) : btParams(btParams){
+BluetoothManager::BluetoothManager(BluetoothParameters* btParams, int rx, int tx) : btParams(btParams), serial(SoftwareSerial(rx,tx)){
 
   this->btParams->bindBTManager(this);
-  
   };
 
 void BluetoothManager::receive(){
@@ -219,22 +215,20 @@ void BluetoothManager::receive(){
 };
 
 void BluetoothManager::send(String requestString){
-  serial.write(requestString);
+
+  int b_size = requestString.length() +1;
+  char c_buf[b_size];
+
+  requestString.toCharArray(c_buf, b_size);
+  
+  serial.write(c_buf);
 };
 
 void BluetoothManager::setMode(bool at){
   this->mode = at;
 }
 
-void BluetoothManager::setupSerial(int rx, int tx){
-  this->serial = SoftwareSerial(rx, tx);
-}
-
-void BluetoothManager::setup(int rx, int tx, String name, String pass){
-  this->name = name;
-  this->pass = pass;
-
-  this->setupSerial(rx, tx);
+void BluetoothManager::setup(String name, String pass){
 
   serial.begin(38400);
 
@@ -245,7 +239,7 @@ void BluetoothManager::setup(int rx, int tx, String name, String pass){
   this->atCommand("AT+ADDRESS");
 
   this->atCommand("AT+NAME" + name);
-  this->atCommand("AT+PSWD" pass);
+  this->atCommand("AT+PSWD" + pass);
 
   delay(500);
 
@@ -253,7 +247,13 @@ void BluetoothManager::setup(int rx, int tx, String name, String pass){
 }
 
 void BluetoothManager::atCommand(String command){
-  serial.write(command);
+
+  int buf_size = command.length()+1;
+  char char_buf[buf_size];
+
+  command.toCharArray(char_buf, buf_size);
+  
+  serial.write(char_buf);
   serial.write(0x0D);
   serial.write(0x0A);
 }

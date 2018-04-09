@@ -16,17 +16,7 @@
       <Separator layoutX="60.0" layoutY="66.0" prefWidth="200.0" />
       <VBox layoutX="31.0" layoutY="77.0" prefHeight="324.0" prefWidth="260.0" fx:id="varContainer">
          <children>
-            <AnchorPane prefHeight="46.0" prefWidth="260.0">
-               <children>
-                  <Text layoutY="28.0" strokeType="OUTSIDE" strokeWidth="0.0" text="VariableName" wrappingWidth="122.13671875">
-                     <font>
-                        <Font name="Monospaced Regular" size="12.0" />
-                     </font>
-                  </Text>
-                  <TextField layoutX="128.0" layoutY="11.0" prefHeight="25.0" prefWidth="72.0" />
-                  <Button layoutX="217.0" layoutY="11.0" mnemonicParsing="false" text="Send" />
-               </children>
-            </AnchorPane>
+
          </children>
       </VBox>
    </children>
