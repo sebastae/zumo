@@ -1,5 +1,6 @@
 #include<StandardCplusplus.h>
 #include <map>
+#include <SoftwareSerial.h>
 
 // Comment our to turn off debugging
 #ifndef BT_DEBUG
@@ -30,7 +31,7 @@ enum REQUEST_DTYPE{
 //////////////////////////////////////////////////////////////
 
 template<class T> class BTParam;
-class BluetoothParameters;
+class BluetoothManager;
 class BTRequests;
 class BluetoothParameters;
 
@@ -67,10 +68,18 @@ class BluetoothManager{
   private:
     BluetoothParameters* btParams;
     String reqStr;
+    String name;
+    String pass;
+    SoftwareSerial serial;
+    bool mode;
   public:
     BluetoothManager(BluetoothParameters* btParams);
     void receive();
     void send(String requestString);
+    void setup(String name, String pass);
+    void setupSerial(int tx, int rx);
+    void setMode(bool at);
+    void atCommand(String command);
 };
 
 class BluetoothParameters{
@@ -185,25 +194,71 @@ String BTRequest::getValue(){
 
 // BluetoothManager
 
-BluetoothManager::BluetoothManager(BluetoothParameters* btParams) : btParams(btParams){};
+BluetoothManager::BluetoothManager(BluetoothParameters* btParams) : btParams(btParams){
+
+  this->btParams->bindBTManager(this);
+  
+  };
 
 void BluetoothManager::receive(){
-  while(Serial.available()){
-    char receivedByte = Serial.read();
-    this->reqStr.concat(receivedByte);
-    if(receivedByte == ';'){
-      #ifdef BT_DEBUG
-        Serial.println(this->reqStr);
-      #endif
-      this->btParams->handleRequest(this->reqStr);
-      this->reqStr = "";
-    };
-  };
+  while(serial.available()){
+    if(!(this->mode)){
+      char receivedByte = serial.read();
+      this->reqStr.concat(receivedByte);
+      if(receivedByte == ';'){
+        #ifdef BT_DEBUG
+          Serial.println(this->reqStr);
+        #endif
+        this->btParams->handleRequest(this->reqStr);
+        this->reqStr = "";
+      }
+    } else {
+      Serial.write(serial.read());
+    }
+  }
 };
 
 void BluetoothManager::send(String requestString){
-  Serial.print(requestString);
+  serial.write(requestString);
 };
+
+void BluetoothManager::setMode(bool at){
+  this->mode = at;
+}
+
+void BluetoothManager::setupSerial(int rx, int tx){
+  this->serial = SoftwareSerial(rx, tx);
+}
+
+void BluetoothManager::setup(int rx, int tx, String name, String pass){
+  this->name = name;
+  this->pass = pass;
+
+  this->setupSerial(rx, tx);
+
+  serial.begin(38400);
+
+  this->setMode(true);
+
+  this->atCommand("AT");
+  this->atCommand("AT+VERSION");
+  this->atCommand("AT+ADDRESS");
+
+  this->atCommand("AT+NAME" + name);
+  this->atCommand("AT+PSWD" pass);
+
+  delay(500);
+
+  this->setMode(false);
+}
+
+void BluetoothManager::atCommand(String command){
+  serial.write(command);
+  serial.write(0x0D);
+  serial.write(0x0A);
+}
+
+
 
 
 // BluetoothParameters

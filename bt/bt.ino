@@ -11,7 +11,6 @@ int aPrev = 0;
 String bPrev = "";
 void setup() {
     Serial.begin(9600);
-    btParams.bindBTManager(&btManager);
     btParams.add(&a, "a");
     btParams.add(&b, "b");
 }
