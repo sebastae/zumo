@@ -5,7 +5,7 @@ void modeAttack() {
   usR = checkUS('R');
   
   //if((usC && !(usL || usR)) || (usC && usL && usR)) {
-  if((usC && usL && usR) || (usC && !usL && !usR)) {
+  if(checkFrontIR() || (usC && usL && usR) || (usC && !usL && !usR) || (!usC && usL && usR)) {
     motors.setSpeeds(motorMaxSpeed, motorMaxSpeed);
   } 
 
@@ -28,10 +28,9 @@ void modeAttack() {
   } 
   else {
     if(lastSeenLeft) {
-      motors.setSpeeds(-motorMaxSpeed/2, motorMaxSpeed/2); 
+      motors.setSpeeds(-motorMaxTurnSpeed, motorMaxTurnSpeed); 
     } else {
-      motors.setSpeeds(motorMaxSpeed/2, -motorMaxSpeed/2);
+      motors.setSpeeds(motorMaxTurnSpeed, -motorMaxTurnSpeed);
     }
   }
-  
 }

@@ -1,8 +1,8 @@
 void modeEdge() {  
   //Serial.println("SO EDGY");
   motors.setSpeeds(-motorMaxSpeed, -motorMaxSpeed);
-  delay(300);
+  delay(TURNTIME/2);
   motors.setSpeeds(motorMaxSpeed, -motorMaxSpeed);
-  delay(500);
+  delay(TURNTIME);
   mode = ATTACK;
 }

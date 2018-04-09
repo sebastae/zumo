@@ -47,15 +47,21 @@ int checkUSdistance(char sensorLocation) {
   }
   return duration;
 }
-/*
-void printSensorCheck() { // Husk å 
-  Serial.print(checkUS('C'));
-  Serial.print(" - ");
+
+void printSensorCheck() { 
   Serial.print(checkUS('L'));
+  Serial.print(" - ");
+  Serial.print(checkUS('C'));
   Serial.print(" - ");
   Serial.print(checkUS('R'));
   Serial.print(" - ");
   Serial.print(checkUS('B'));
   Serial.println();
   
-}*/
+}
+
+
+
+
+
+

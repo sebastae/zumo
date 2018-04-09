@@ -1,6 +1,5 @@
 #include <ZumoMotors.h>
 #include <Pushbutton.h>
-#include <QTRSensors.h>
 
 ZumoMotors motors;
 
@@ -33,17 +32,17 @@ bool lastSeenLeft = true;
 
 // IR
 
-#define NUM_SENSORS             6  // number of sensors used
-#define NUM_SAMPLES_PER_SENSOR  2  // average 4 analog samples per sensor reading
-#define EMITTER_PIN             2  // emitter is controlled by digital pin 2
+#define irProbeTimes 3
+#define frontIRchangeToTrigg 30
+int frontIRtreshold = 0;
 
-QTRSensorsAnalog ir((unsigned char[]) {0, 1, 2, 3, 4, 5}, 
-NUM_SENSORS, NUM_SAMPLES_PER_SENSOR, EMITTER_PIN);
-unsigned int irVal[NUM_SENSORS];
+#define FRONTIRTRIGGERPIN 2
+
 
 // -------------------------- Movement
 
 #define motorMaxSpeed 350
+#define motorMaxTurnSpeed 260
 #define TURNTIME 300
 
 int aks = 150;
@@ -65,12 +64,18 @@ Pushbutton button(ZUMO_BUTTON);
 // -------------------------- Setup
 void setup() {
   //Serial.begin (9600);
+  pinMode(FRONTIRTRIGGERPIN, OUTPUT);
   pinMode(trigPin, OUTPUT);
   pinMode(echoCenterPin, INPUT);
   pinMode(echoLeftPin, INPUT);
   pinMode(echoRightPin, INPUT);
   pinMode(led, OUTPUT);
   pinMode(12, INPUT_PULLUP);
+
+  delay(1000);
+  //frontIRtreshold = calibrateFrontIR();
+  //digitalWrite(FRONTIRTRIGGERPIN, HIGH);
+  Serial.println(frontIRtreshold);
 
   digitalWrite(led, HIGH);
   button.waitForButton();
@@ -82,15 +87,15 @@ void setup() {
 void loop() {
 
   // Sett modus
-  if(button.isPressed()) {
-    mode = STOP;
-  } else if ((mode != STOP) && checkLine()) {
+  
+  if ((mode != STOP) && checkLine()) {
     mode = EDGE;
-  } else if((mode != STOP) && checkUSdistance('B') < 1300 && checkUSdistance('B') > 0) {
+  } else if((mode != STOP) && checkUS('B')) {
     mode = DEFENCE;
   }
 
   // Kjøring av satt modus
+  
   if(mode == ATTACK) {
     modeAttack();
   } else if(mode == DEFENCE) {
@@ -102,7 +107,9 @@ void loop() {
   } else if(mode == BLUETOOTH) {
     modeBluetooth();
   } 
+  
   //printSensorCheck();
+  //Serial.println(checkFrontIR());
   
 }
 
