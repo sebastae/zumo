@@ -1,11 +1,10 @@
 #include<StandardCplusplus.h>
 #include <map>
 #include <SoftwareSerial.h>
+#include <PLabBTSerial.h>
 
 // Comment our to turn off debugging
-#ifndef BT_DEBUG
-//#define BT_DEBUG
-#endif
+#define BT_DEBUG
 
 #ifndef BTPRMS_H
 #define BTPRMS_H
@@ -68,7 +67,7 @@ class BluetoothManager{
   private:
     BluetoothParameters* btParams;
     String reqStr;
-    SoftwareSerial serial;
+    PLabBTSerial serial;
     bool mode;
   public:
     BluetoothManager(BluetoothParameters* btParams, int rx, int tx);
@@ -191,26 +190,38 @@ String BTRequest::getValue(){
 
 // BluetoothManager
 
-BluetoothManager::BluetoothManager(BluetoothParameters* btParams, int rx, int tx) : btParams(btParams), serial(SoftwareSerial(rx,tx)){
+BluetoothManager::BluetoothManager(BluetoothParameters* btParams, int tx, int rx) : btParams(btParams), serial(PLabBTSerial(tx,rx)){
 
   this->btParams->bindBTManager(this);
   };
 
 void BluetoothManager::receive(){
-  while(serial.available()){
+  if(serial.available()){
     if(!(this->mode)){
       char receivedByte = serial.read();
       this->reqStr.concat(receivedByte);
+
+      #ifdef BT_DEBUG
+        Serial.write(receivedByte);
+      #endif
+      
       if(receivedByte == ';'){
         #ifdef BT_DEBUG
+          Serial.println("");
           Serial.println(this->reqStr);
         #endif
         this->btParams->handleRequest(this->reqStr);
         this->reqStr = "";
+        
       }
     } else {
       Serial.write(serial.read());
     }
+  }else if(this->reqStr != ""){
+    #ifdef BT_DEBUG
+      Serial.println(this->reqStr);
+    #endif
+    this->reqStr = "";
   }
 };
 
@@ -222,6 +233,10 @@ void BluetoothManager::send(String requestString){
   requestString.toCharArray(c_buf, b_size);
   
   serial.write(c_buf);
+  #ifdef BT_DEBUG
+    Serial.print("Sending string: ");
+    Serial.println(c_buf);
+  #endif
 };
 
 void BluetoothManager::setMode(bool at){
@@ -230,13 +245,20 @@ void BluetoothManager::setMode(bool at){
 
 void BluetoothManager::setup(String name, String pass){
 
+  #ifdef BT_DEBUG
+    Serial.print("Setup name: ");
+    Serial.println(name);
+    Serial.print("Setup pass: ");
+    Serial.println(pass);
+  #endif
+
   serial.begin(38400);
 
   this->setMode(true);
 
-  this->atCommand("AT");
-  this->atCommand("AT+VERSION");
-  this->atCommand("AT+ADDRESS");
+  //this->atCommand("AT");
+  //this->atCommand("AT+VERSION");
+  //this->atCommand("AT+ADDRESS");
 
   this->atCommand("AT+NAME" + name);
   this->atCommand("AT+PSWD" + pass);
@@ -252,6 +274,12 @@ void BluetoothManager::atCommand(String command){
   char char_buf[buf_size];
 
   command.toCharArray(char_buf, buf_size);
+
+  #ifdef BT_DEBUG
+    Serial.write(char_buf);
+    Serial.write(0x0D);
+    Serial.write(0x0A);
+  #endif
   
   serial.write(char_buf);
   serial.write(0x0D);

@@ -1,5 +1,7 @@
 package zumo_bluetooth;
 
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
@@ -12,17 +14,15 @@ public class WindowManager {
 
 	
 	private VBox vbx;
+	private ClientController ctrl;
 	
-	public WindowManager(VBox vbx) {
+	public WindowManager(VBox vbx, ClientController ctrl) {
 		this.vbx = vbx;
+		this.ctrl = ctrl;
 	}
 	
 	public void addParameter(BTParameter param) {
 		
-		AnchorPane ap = new AnchorPane();
-		
-		ap.setPrefWidth(260);
-		ap.setPrefHeight(46);
 		
 		
 		Text txt = new Text();
@@ -54,11 +54,20 @@ public class WindowManager {
 		btn.setLayoutY(11);
 		btn.setMnemonicParsing(false);
 		btn.setText("Send");
+		btn.setOnAction(new EventHandler<ActionEvent>() {
+			
+			@Override
+			public void handle(ActionEvent event) {
+				ctrl.set(param.getName(), tf.getText());
+				
+			}
+		});
 		
 		
-		ap.getChildren().add(txt);
-		ap.getChildren().add(tf);
-		ap.getChildren().add(btn);
+		AnchorPane ap = new AnchorPane(txt, tf, btn);
+		
+		ap.setPrefWidth(260);
+		ap.setPrefHeight(46);
 		
 		vbx.getChildren().add(ap);
 		
