@@ -30,7 +30,5 @@ void loop() {
    aPrev = a;
    bPrev = b;
   }
-
-  btManager.send("abc");
   delay(500);
 }
