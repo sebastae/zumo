@@ -1,9 +1,9 @@
-#include<StandardCplusplus.h>
-#include <map>
+#include"StandardCplusplus.h"
+#include "map"
 #include <SoftwareSerial.h>
 
-// Comment out to turn off debugging
-//#define BT_DEBUG
+// Comment our to turn off debugging
+#define BT_DEBUG
 
 #ifndef BTPRMS_H
 #define BTPRMS_H

@@ -1,8 +1,8 @@
 #include "BluetoothParameters.h"
 
 
-#define txPin 3
-#define rxPin 2
+#define txPin 1
+#define rxPin 0
 
 BluetoothParameters btParams = BluetoothParameters();
 BluetoothManager btManager = BluetoothManager(&btParams, txPin, rxPin);
@@ -15,7 +15,7 @@ int aPrev = 0;
 String bPrev = "";
 
 void setup() {
-    Serial.begin(9600);
+    //Serial.begin(9600);
     
     btParams.add(&a, "a");
     btParams.add(&b, "b");
@@ -25,10 +25,10 @@ void loop() {
   btManager.receive();
 
   if(aPrev != a || bPrev != b){
-    Serial.print("a: ");
+    /*Serial.print("a: ");
     Serial.println(a);
     Serial.print("b: ");
-    Serial.println(b);
+    Serial.println(b);*/
 
     aPrev = a;
     bPrev = b;
