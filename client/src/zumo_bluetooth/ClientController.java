@@ -3,32 +3,59 @@ package zumo_bluetooth;
 import java.util.ArrayList;
 
 import javafx.fxml.FXML;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
-public class ClientController {
+public class ClientController{
 
 	public WindowManager winMng;
 	public BluetoothManager btMng;
 	
-	public ArrayList<BTParameter> params;
+	private ArrayList<ParameterConnection> connections;
 	
 	
 	@FXML
 	public VBox varContainer;
 	
+
 	@FXML
-	public Text portNameField;
+	public TextField portSelector;
+	
+	@FXML
+	public Text status;
 	
 	
 	public ClientController() {
-		params = new ArrayList<>();
+		connections = new ArrayList<>();
 	}
 	
 	@FXML
 	public void initialize() {
 		winMng = new WindowManager(varContainer, this);
-		btMng = new BluetoothManager(portNameField);
+		btMng = new BluetoothManager(this);
+			
+	}
+	
+	@FXML
+	public void connect() {
+		if(btMng.selectPort(portSelector.getText())) {
+			status.setText("Connected");
+		} else {
+			status.setText("Not connected");
+		}
+	}
+	
+	@FXML
+	public void close() {
+		btMng.close();
+		
+		if(btMng.isOpen()) {
+			status.setText("Connected");
+		} else {
+			status.setText("Not connected");
+		}
+		
 	}
 	
 	
@@ -38,38 +65,32 @@ public class ClientController {
 	}
 	
 	public void get(String name) {
-		for(BTParameter p : params) {
-			if(p.getName().equals(name)) {
-				btMng.send("G" + p.getType() + name + ":0;");
-			}
-		}
+		
 	}
 	
 	public void set(String name, String value) {
-		for(BTParameter p : params) {
-			if(p.getName().equals(name)) {
-				btMng.send("S" + p.getType() + name + ":" + value + ";");
+		for(ParameterConnection c : connections) {
+			if(c.parameter.getName().equals(name)) {
+				btMng.send("S" + c.parameter.getType() + name + ":" + value + ";");
 			}
 		}
 	}
 	
 	public void addParameter(BTParameter param) {
-		for(BTParameter p : params) {
-			if(p.getName().equals(param.getName())){
-				p.setValue(param.getValue());
-				break;
+		System.out.println("Called addParameter");
+		
+		for(ParameterConnection c : connections) {
+			System.out.println("Iterating");
+			if(c.parameter.getName().equals(param.getName())) {
+				c.parameter.setValue(param.getValue());
+				c.text.setText(c.parameter.getValue());
+				System.out.println("Updated " + param.getName() + " to " + param.getValue());
+				return;
 			}
 		}
-		params.add(param);
-		update();
+		System.out.println("Adding connection");
+		this.connections.add(winMng.addParameter(param));
+		System.out.println("Added " + param.getName());
 	}
-	
-	public void update() {
-		varContainer.getChildren().clear();
-		for(BTParameter p : params) {
-			winMng.addParameter(p);
-		}
-	}
-	
 	
 }

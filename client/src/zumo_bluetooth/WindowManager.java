@@ -21,7 +21,7 @@ public class WindowManager {
 		this.ctrl = ctrl;
 	}
 	
-	public void addParameter(BTParameter param) {
+	public ParameterConnection addParameter(BTParameter param) {
 		
 		
 		
@@ -70,6 +70,10 @@ public class WindowManager {
 		ap.setPrefHeight(46);
 		
 		vbx.getChildren().add(ap);
+		
+		System.out.println("Built new Node");
+		
+		return new ParameterConnection(txt, tf, btn, param);
 		
 		
 	}

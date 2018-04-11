@@ -10,8 +10,11 @@ public class BTParameter {
 	public BTParameter(String request) {
 		type = request.substring(1, 4);
 		name = request.substring(4,request.indexOf(":"));
-		value = request.substring(request.indexOf(":") + 1, request.length()-2);
+		value = request.substring(request.indexOf(":") + 1, request.length()-1);
 		originalString = request;
+		
+		System.out.println("Constructed new BTParameter");
+		
 	}
 	
 	

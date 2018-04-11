@@ -13,7 +13,13 @@ public class Client extends Application {
 		FXMLLoader loader = new FXMLLoader();
 		Parent root = (Parent) loader.load(this.getClass().getResourceAsStream("Client.fxml"));
 		primaryStage.setScene(new Scene(root));
+		
+		ClientController controller = loader.getController();
+		primaryStage.setOnCloseRequest(e -> controller.close());
+		
+		
 		primaryStage.show();
+		
 	}
 	
 	

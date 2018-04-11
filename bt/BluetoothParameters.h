@@ -1,7 +1,6 @@
 #include<StandardCplusplus.h>
 #include <map>
 #include <SoftwareSerial.h>
-//#include <PLabBTSerial.h>
 
 // Comment our to turn off debugging
 #define BT_DEBUG
@@ -68,13 +67,11 @@ class BluetoothManager{
     BluetoothParameters* btParams;
     String reqStr;
     SoftwareSerial serial;
-    bool mode;
   public:
-    BluetoothManager(BluetoothParameters* btParams, int rx, int tx);
+    BluetoothManager(BluetoothParameters* btParams, int tx, int rx);
     void receive();
     void send(String requestString);
     void setup(String name, String pass);
-    void setMode(bool at);
     void atCommand(String command);
 };
 
@@ -231,10 +228,6 @@ void BluetoothManager::send(String requestString){
     Serial.println(c_buf);
   #endif
 };
-
-void BluetoothManager::setMode(bool at){
-  this->mode = at;
-}
 
 void BluetoothManager::setup(String name, String pass){
 

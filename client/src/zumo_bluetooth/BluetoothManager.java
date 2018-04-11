@@ -1,38 +1,45 @@
 package zumo_bluetooth;
 
-import javafx.scene.text.Text;
 
 public class BluetoothManager {
 
-	private PLabSerial btSerial;
-	private String name;
-	private Text tf;
+	private BluetoothSerial btSerial;
+	private ClientController controller;
 	
 	
-	public BluetoothManager(Text textField) {
-		this.tf = textField;
+	public BluetoothManager(ClientController ctrl) {
+		this.controller = ctrl;
+		btSerial = new BluetoothSerial();
 		
-		
-		btSerial = new PLabSerial();
-		
-		if(btSerial.openPLabPort()) {
-			name = btSerial.getOpenPortName();
-		} else {
-			name = "No Open Port";
-		}
-		
-		tf.setText(name);
-		
-		btSerial.addListener(this, "receive");
+		btSerial.setMessageListener(this, "receive");
 		
 	}
 	
-	public void receive() {
-		
+	public void close() {
+		btSerial.closePort();
+	}
+	
+	public boolean isOpen() {
+		return btSerial.isOpen();
+	}
+	
+	public String[] getPorts() {
+		return btSerial.getOpenPorts();
+	}
+	
+	public boolean selectPort(String port) {
+		return btSerial.openPort(port);
+	}
+	
+	public void receive(String msg) {
+		System.out.println("Received message");
+		BTParameter p = new BTParameter(msg);
+		controller.addParameter(p);
 	}
 	
 	public void send(String msg) {
-		btSerial.sendMessage(msg);
+		btSerial.send(msg);
+		System.out.println(msg);
 	}
 	
 	
