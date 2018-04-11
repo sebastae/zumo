@@ -1,7 +1,7 @@
 // Lingesensor under bilen
 
 bool checkLine() {
-  if(checkIR(0) > 9) {
+  if(checkIR(0) < 9) {
     return true;
   }
   return false;

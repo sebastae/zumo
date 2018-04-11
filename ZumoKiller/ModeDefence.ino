@@ -35,6 +35,9 @@ void modeDefence() {
 }
 
 void defTurn() {
+  if(checkLine()){
+    return;
+  }
   if (!checkUS('L') && !checkUS('L') && !checkUS('L')) {
     defTurn();
   }

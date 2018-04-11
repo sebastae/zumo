@@ -49,6 +49,7 @@ int checkUSdistance(char sensorLocation) {
 }
 
 void printSensorCheck() { 
+  /*
   Serial.print(checkUS('L'));
   Serial.print(" - ");
   Serial.print(checkUS('C'));
@@ -57,7 +58,7 @@ void printSensorCheck() {
   Serial.print(" - ");
   Serial.print(checkUS('B'));
   Serial.println();
-  
+  */
 }
 
 

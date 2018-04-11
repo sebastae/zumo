@@ -1,7 +1,9 @@
 #include <ZumoMotors.h>
 #include <Pushbutton.h>
-
 ZumoMotors motors;
+#include "BluetoothParameters.h"
+
+
 
 // -------------------------- Modes
 
@@ -13,6 +15,15 @@ int mode = 1;
 #define TRACK 3
 #define EDGE 4
 #define BLUETOOTH 5
+
+// -------------------------- Bluetooth
+
+#define TX 1
+#define RX 0
+
+BluetoothParameters bt = BluetoothParameters();
+BluetoothManager btm = BluetoothManager(&bt, TX, RX);
+
 
 // -------------------------- Sensors
 
@@ -41,9 +52,9 @@ int frontIRtreshold = 0;
 
 // -------------------------- Movement
 
-#define motorMaxSpeed 350
-#define motorMaxTurnSpeed 260
-#define TURNTIME 300
+int motorMaxSpeed = 400;
+int motorMaxTurnSpeed = 260;
+int TURNTIME = 300;
 
 int aks = 150;
 int deseleration = 600;
@@ -56,6 +67,9 @@ bool usL = false;
 bool usC = false;
 bool usR = false;
 
+bool counterOn = false;
+int counter;
+int countLength = 80;
 // -------------------------- Diverse
 
 #define led 13
@@ -64,6 +78,8 @@ Pushbutton button(ZUMO_BUTTON);
 // -------------------------- Setup
 void setup() {
   //Serial.begin (9600);
+  bt.add(&motorMaxSpeed, "motorMaxSpeed");
+  bt.add(&motorMaxTurnSpeed, "motorMaxTurnSpeed");
   pinMode(FRONTIRTRIGGERPIN, OUTPUT);
   pinMode(trigPin, OUTPUT);
   pinMode(echoCenterPin, INPUT);
@@ -75,7 +91,7 @@ void setup() {
   delay(1000);
   //frontIRtreshold = calibrateFrontIR();
   //digitalWrite(FRONTIRTRIGGERPIN, HIGH);
-  Serial.println(frontIRtreshold);
+  //Serial.println(frontIRtreshold);
 
   digitalWrite(led, HIGH);
   button.waitForButton();
@@ -100,6 +116,8 @@ void loop() {
     modeAttack();
   } else if(mode == DEFENCE) {
     modeDefence();
+  } else if(mode == TRACK) {
+    modeTrack();
   } else if(mode == STOP) {
     modeStop();
   } else if(mode == EDGE) {
@@ -110,7 +128,7 @@ void loop() {
   
   //printSensorCheck();
   //Serial.println(checkFrontIR());
-  
+  btm.receive();
 }
 
 

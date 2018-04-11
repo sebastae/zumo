@@ -32,5 +32,19 @@ void modeAttack() {
     } else {
       motors.setSpeeds(motorMaxTurnSpeed, -motorMaxTurnSpeed);
     }
+
+    if (!counterOn) {
+      counterOn = true;
+      counter = countLength;
+      //Serial.println("Counter on");
+    }
+    if(counterOn) {
+      counter--;
+      //Serial.println(counter);
+    }
+    if (counter <= 0) { 
+      mode = TRACK;
+      counterOn = false;
+    }
   }
 }
