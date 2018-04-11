@@ -1,5 +1,6 @@
 #include "BluetoothParameters.h"
 
+
 #define txPin 3
 #define rxPin 2
 
@@ -13,7 +14,6 @@ String b = "";
 int aPrev = 0;
 String bPrev = "";
 
-int setup_times = 0;
 void setup() {
     Serial.begin(9600);
     
@@ -23,12 +23,16 @@ void setup() {
 
 void loop() {
   btManager.receive();
-  if(a!= aPrev || b != bPrev){
-    Serial.print(a);
-    Serial.print(" , ");
+
+  if(aPrev != a || bPrev != b){
+    Serial.print("a: ");
+    Serial.println(a);
+    Serial.print("b: ");
     Serial.println(b);
-   aPrev = a;
-   bPrev = b;
+
+    aPrev = a;
+    bPrev = b;
+    
   }
-  delay(500);
+  
 }
