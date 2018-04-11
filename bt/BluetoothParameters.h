@@ -2,8 +2,8 @@
 #include <map>
 #include <SoftwareSerial.h>
 
-// Comment our to turn off debugging
-#define BT_DEBUG
+// Comment out to turn off debugging
+//#define BT_DEBUG
 
 #ifndef BTPRMS_H
 #define BTPRMS_H
