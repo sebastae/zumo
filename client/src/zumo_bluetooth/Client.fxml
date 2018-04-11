@@ -15,10 +15,11 @@
       <Separator layoutX="61.0" layoutY="81.0" prefWidth="200.0" />
       <VBox fx:id="varContainer" layoutX="31.0" layoutY="104.0" prefHeight="373.0" prefWidth="260.0">
          <children>
-
+			
          </children>
       </VBox>
       <TextField fx:id="portSelector" layoutX="130.0" layoutY="14.0" prefHeight="25.0" prefWidth="60.0" promptText="COM5" />
       <Text fx:id="status" layoutX="201.0" layoutY="31.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Not connected" />
+      <Button layoutX="61.0" layoutY="14.0" mnemonicParsing="false" onAction="#update" prefHeight="25.0" prefWidth="60.0" text="Update" />
    </children>
 </AnchorPane>

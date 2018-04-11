@@ -103,7 +103,10 @@ public class BluetoothSerial {
 				buffer[i] = (byte) msg.charAt(i);
 			}
 			
+			
+			System.out.println("Constructed buffer, Getting stream");
 			OutputStream output = activePort.getOutputStream();
+			System.out.println("Got stream, trying to write");
 			
 			try {
 				output.write(buffer, 0, buffer.length);
@@ -151,7 +154,8 @@ public class BluetoothSerial {
 						try {
 							callback(message);
 						} catch (Exception e) {
-							// TODO: handle exception
+							System.err.println("Callback failed");
+							e.printStackTrace();
 						}
 						
 					}

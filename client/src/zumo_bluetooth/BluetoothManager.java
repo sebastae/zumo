@@ -32,14 +32,19 @@ public class BluetoothManager {
 	}
 	
 	public void receive(String msg) {
-		System.out.println("Received message");
-		BTParameter p = new BTParameter(msg);
-		controller.addParameter(p);
+		
+		String[] s = msg.split(";");
+		
+		for(String str : s) {
+			System.out.println("Received message: " + str);
+			controller.parameters.push(new BTParameter(str + ";"));
+			
+		}
+		
 	}
 	
 	public void send(String msg) {
 		btSerial.send(msg);
-		System.out.println(msg);
 	}
 	
 	

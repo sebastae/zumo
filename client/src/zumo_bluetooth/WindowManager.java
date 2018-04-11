@@ -23,6 +23,7 @@ public class WindowManager {
 	
 	public ParameterConnection addParameter(BTParameter param) {
 		
+		System.out.println("Starting Text");
 		
 		
 		Text txt = new Text();
@@ -39,6 +40,8 @@ public class WindowManager {
 		
 		txt.setFont(monospaceFont);
 		
+		System.out.println("Starting TextField");
+		
 		TextField tf = new TextField();
 		
 		tf.setLayoutY(11);
@@ -47,6 +50,8 @@ public class WindowManager {
 		tf.setPrefWidth(72);
 		
 		tf.setText(param.getValue());
+		
+		System.out.println("Staring button");
 		
 		Button btn = new Button();
 		
@@ -63,13 +68,28 @@ public class WindowManager {
 			}
 		});
 		
+		System.out.println("Starting AnchorPane");
 		
-		AnchorPane ap = new AnchorPane(txt, tf, btn);
+		
+		AnchorPane ap = new AnchorPane();
+		
 		
 		ap.setPrefWidth(260);
 		ap.setPrefHeight(46);
 		
-		vbx.getChildren().add(ap);
+		System.out.println("Adding nodes to AnchorPane");
+		
+		ap.getChildren().add(txt);
+		ap.getChildren().add(tf);
+		ap.getChildren().add(btn);
+		
+		System.out.println("Done with node setup");
+		System.out.println(ap.toString());
+		System.out.println(vbx.toString());
+		System.out.println(vbx.getChildren().toString());
+		System.out.println(ap.getChildren().toString());
+		
+		this.vbx.getChildren().add(ap);
 		
 		System.out.println("Built new Node");
 		

@@ -16,7 +16,9 @@ public class ParameterConnection {
 	@FXML
 	public Button button;
 	
-	BTParameter parameter;
+	public BTParameter parameter;
+	
+	public boolean added = false;
 	
 	public ParameterConnection(Text t, TextField tf, Button b, BTParameter p) {
 		text = t;

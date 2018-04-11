@@ -1,6 +1,7 @@
 package zumo_bluetooth;
 
 import java.util.ArrayList;
+import java.util.Stack;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
@@ -12,7 +13,10 @@ public class ClientController{
 	public WindowManager winMng;
 	public BluetoothManager btMng;
 	
-	private ArrayList<ParameterConnection> connections;
+	private ArrayList<ParameterConnection> connections = new ArrayList<>();
+	public Stack<BTParameter> parameters = new Stack<>();
+	
+	
 	
 	
 	@FXML
@@ -27,7 +31,7 @@ public class ClientController{
 	
 	
 	public ClientController() {
-		connections = new ArrayList<>();
+		//connections = new ArrayList<>();
 	}
 	
 	@FXML
@@ -61,11 +65,18 @@ public class ClientController{
 	
 	@FXML
 	public void getAll() {
+		System.out.println("Sending GETALL");
 		btMng.send("A;");
 	}
 	
 	public void get(String name) {
 		
+	}
+	
+	public void update() {
+		while(!parameters.isEmpty()) {
+			addParameter(parameters.pop());
+		}
 	}
 	
 	public void set(String name, String value) {
@@ -83,13 +94,15 @@ public class ClientController{
 			System.out.println("Iterating");
 			if(c.parameter.getName().equals(param.getName())) {
 				c.parameter.setValue(param.getValue());
-				c.text.setText(c.parameter.getValue());
+				c.textField.setText(c.parameter.getValue());
 				System.out.println("Updated " + param.getName() + " to " + param.getValue());
 				return;
 			}
 		}
 		System.out.println("Adding connection");
-		this.connections.add(winMng.addParameter(param));
+		ParameterConnection pc = winMng.addParameter(param);
+		System.out.println(connections.toString());
+		connections.add(pc);
 		System.out.println("Added " + param.getName());
 	}
 	
