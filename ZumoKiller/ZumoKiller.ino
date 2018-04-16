@@ -18,8 +18,8 @@ int mode = 1;
 
 // -------------------------- Bluetooth
 
-#define TX 1
-#define RX 0
+#define TX A5
+#define RX A4
 
 BluetoothParameters bt = BluetoothParameters();
 BluetoothManager btm = BluetoothManager(&bt, TX, RX);
@@ -77,9 +77,10 @@ Pushbutton button(ZUMO_BUTTON);
 
 // -------------------------- Setup
 void setup() {
+  
   //Serial.begin (9600);
-  bt.add(&motorMaxSpeed, "motorMaxSpeed");
-  bt.add(&motorMaxTurnSpeed, "motorMaxTurnSpeed");
+  // bt.add(&motorMaxSpeed, "motorMaxSpeed");
+  // bt.add(&motorMaxTurnSpeed, "motorMaxTurnSpeed");
   pinMode(FRONTIRTRIGGERPIN, OUTPUT);
   pinMode(trigPin, OUTPUT);
   pinMode(echoCenterPin, INPUT);
@@ -97,10 +98,13 @@ void setup() {
   button.waitForButton();
   delay(1000);
   digitalWrite(led, LOW);
+  
 }
 
 // -------------------------- Loop
 void loop() {
+
+  //(&btm)->receive();
 
   // Sett modus
   
@@ -125,10 +129,11 @@ void loop() {
   } else if(mode == BLUETOOTH) {
     modeBluetooth();
   } 
+
+  btm.send(String(mode));
   
   //printSensorCheck();
   //Serial.println(checkFrontIR());
-  btm.receive();
 }
 
 
